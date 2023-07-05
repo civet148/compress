@@ -19,3 +19,6 @@
 
 # Go workspace file
 go.work
+/examples/gzip/metrics.gz
+/examples/gzip/metrics-decompressed.txt
+/examples/gzip/plain.gz
