@@ -48,6 +48,28 @@ func (m *Decompressor) DecompressBytes2Bytes(data []byte) ([]byte, error) {
 	return out.Bytes(), nil
 }
 
+func (m *Decompressor) DecompressBytes2File(data []byte, dst string) (int64, error) {
+	compr, err := m.DecompressBytes2Bytes(data)
+	//create dest file
+	fd, err := os.OpenFile(dst, os.O_CREATE|os.O_TRUNC|os.O_RDWR, os.ModePerm)
+	if err != nil {
+		return 0, err
+	}
+	defer fd.Close()
+
+	reader := bytes.NewReader(compr)
+	_, err = io.Copy(fd, reader)
+	if err != nil {
+		return 0, err
+	}
+	var fi os.FileInfo
+	fi, err = fd.Stat()
+	if err != nil {
+		return 0, err
+	}
+	return fi.Size(), nil
+}
+
 func (m *Decompressor) DecompressFile2Bytes(src string) ([]byte, error) {
 	f, err := os.Open(src)
 	if err != nil {
