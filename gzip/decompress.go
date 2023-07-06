@@ -3,6 +3,7 @@ package gzip
 import (
 	"bytes"
 	"compress/gzip"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"os"
@@ -121,4 +122,20 @@ func (m *Decompressor) DecompressFile2File(src, dst string) (int64, error) {
 		return 0, err
 	}
 	return fi.Size(), nil
+}
+
+func (m *Decompressor) DecompressBytes2Base64(data []byte) (string, error) {
+	dec, err := m.DecompressBytes2Bytes(data)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(dec), nil
+}
+
+func (m *Decompressor) DecompressFile2Base64(src string) (string, error) {
+	dec, err := m.DecompressFile2Bytes(src)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(dec), nil
 }

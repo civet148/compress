@@ -172,3 +172,11 @@ func (m *Compressor) CompressBytes2Base64(data []byte) (string, error) {
 	}
 	return base64.StdEncoding.EncodeToString(comp), nil
 }
+
+func (m *Compressor) CompressFile2Base64(src string) (string, error) {
+	comp, err := m.CompressFile2Bytes(src)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(comp), nil
+}
